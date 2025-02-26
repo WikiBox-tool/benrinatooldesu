@@ -65,7 +65,8 @@
             let html = '';
             for (let [key, link] of Object.entries(types)) {
                 html += `<p>${key}: <button class='btn' onclick="redirectTo('${link}')">生成URL</button> 
-                        <button class='btn' onclick="copyToClipboard('${link}')">コピー</button></p>`;
+                        <button class='btn' onclick="copyToClipboard('${link}')">コピー</button>
+                        <button class='btn' onclick="generateShareLinkForGenerated('${link}')">共有</button></p>`;
             }
             document.getElementById("link-results").innerHTML = html;
         }
@@ -75,7 +76,13 @@
             const link = `https://line.me/R/share?text=${text}`;
             document.getElementById("share-result").innerHTML = `
                 <button class='btn' onclick="redirectTo('${link}')">生成URL</button> 
-                <button class='btn' onclick="copyToClipboard('${link}')">コピー</button>`;
+                <button class='btn' onclick="copyToClipboard('${link}')">コピー</button>
+                <button class='btn' onclick="generateShareLinkForGenerated('${link}')">共有</button>`;
+        }
+
+        function generateShareLinkForGenerated(link) {
+            const shareLink = `https://line.me/R/share?text=${encodeURIComponent(link)}`;
+            window.open(shareLink, '_blank');
         }
         
         function analyzeUnicode() {
