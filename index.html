@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINE便利(なはず)ツール❕</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>LINE便利(なはず)ツール❕</h1>
+    <div class="tab-buttons">
+        <button onclick="switchTool('link')">LINK変換</button>
+        <button onclick="switchTool('share')">共有ツール</button>
+        <button onclick="switchTool('unicode')">Unicode解析ツール</button>
+    </div>
+    
+    <div id="link-tool" class="tool">
+        <h2>LINK変換</h2>
+        <input type="text" id="link-input" placeholder="招待リンクを入力">
+        <select id="link-type">
+            <option value="report">通報リンク</option>
+            <option value="invite">招待リンク</option>
+            <option value="join">参加リンク</option>
+        </select>
+        <button onclick="generateLink()">リンク生成</button>
+        <p id="generated-link"></p>
+        <button onclick="copyText('generated-link')">コピー</button>
+        <button onclick="copyText('ticket')">Ticketコピー</button>
+        <button onclick="shareLink()">共有</button>
+    </div>
+    
+    <div id="share-tool" class="tool" style="display: none;">
+        <h2>共有ツール</h2>
+        <input type="text" id="share-input" placeholder="共有内容を入力">
+        <button onclick="generateShareLink()">共有リンク生成</button>
+        <p id="share-link"></p>
+        <button onclick="copyText('share-link')">コピー</button>
+    </div>
+    
+    <div id="unicode-tool" class="tool" style="display: none;">
+        <h2>Unicode解析ツール</h2>
+        <input type="text" id="unicode-input" placeholder="文字を入力">
+        <button onclick="convertToUnicode()">解析</button>
+        <p id="unicode-result"></p>
+    </div>
+    
+    <footer>
+        <p>このツールは試験用であり、開発者は一切の責任を負いません。</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
