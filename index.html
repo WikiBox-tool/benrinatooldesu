@@ -4,49 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LINE便利(なはず)ツール❕</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body { font-family: Arial, sans-serif; background: #fff; color: #000; text-align: center; }
+        .btn { margin: 5px; padding: 10px 20px; border: 1px solid #000; background: #fff; cursor: pointer; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
     <h1>LINE便利(なはず)ツール❕</h1>
-    <div class="tab-buttons">
-        <button onclick="switchTool('link')">LINK変換</button>
-        <button onclick="switchTool('share')">共有ツール</button>
-        <button onclick="switchTool('unicode')">Unicode解析ツール</button>
+    <div>
+        <button class="btn" onclick="switchTool(0)">LINK変換</button>
+        <button class="btn" onclick="switchTool(1)">共有ツール</button>
+        <button class="btn" onclick="switchTool(2)">Unicode解析</button>
     </div>
     
-    <div id="link-tool" class="tool">
+    <div id="tool-link" class="tool">
         <h2>LINK変換</h2>
-        <input type="text" id="link-input" placeholder="招待リンクを入力">
-        <select id="link-type">
-            <option value="report">通報リンク</option>
-            <option value="invite">招待リンク</option>
-            <option value="join">参加リンク</option>
-        </select>
-        <button onclick="generateLink()">リンク生成</button>
-        <p id="generated-link"></p>
-        <button onclick="copyText('generated-link')">コピー</button>
-        <button onclick="copyText('ticket')">Ticketコピー</button>
-        <button onclick="shareLink()">共有</button>
+        <input type="text" id="input-url" placeholder="URLを入力">
+        <button class="btn" onclick="generateLinks()">生成</button>
+        <div id="link-results"></div>
     </div>
     
-    <div id="share-tool" class="tool" style="display: none;">
+    <div id="tool-share" class="tool hidden">
         <h2>共有ツール</h2>
-        <input type="text" id="share-input" placeholder="共有内容を入力">
-        <button onclick="generateShareLink()">共有リンク生成</button>
-        <p id="share-link"></p>
-        <button onclick="copyText('share-link')">コピー</button>
+        <input type="text" id="share-text" placeholder="共有内容を入力">
+        <button class="btn" onclick="generateShareLink()">共有リンク生成</button>
+        <div id="share-result"></div>
     </div>
     
-    <div id="unicode-tool" class="tool" style="display: none;">
+    <div id="tool-unicode" class="tool hidden">
         <h2>Unicode解析ツール</h2>
         <input type="text" id="unicode-input" placeholder="文字を入力">
-        <button onclick="convertToUnicode()">解析</button>
-        <p id="unicode-result"></p>
+        <button class="btn" onclick="analyzeUnicode()">解析</button>
+        <div id="unicode-results"></div>
     </div>
     
-    <footer>
-        <p>このツールは試験用であり、開発者は一切の責任を負いません。</p>
-    </footer>
-    <script src="script.js"></script>
+    <p>※このツールは試験用であり、開発者は一切の責任を負いません。</p>
+    
+    <script>
+        function switchTool(index) {
+            document.querySelectorAll('.tool').forEach((tool, i) => {
+                tool.classList.toggle('hidden', i !== index);
+            });
+        }
+        
+        function extractTicket(url) {
+            const match = url.match(/g2\/(.*?)\?/);
+            return match ? match[1] : '';
+        }
+        
+        function generateLinks() {
+            const url = document.getElementById("input-url").value;
+            const ticket = extractTicket(url);
+            if (!ticket) { alert("正しいURLを入力してください"); return; }
+            const types = {
+                '通報': `https://line.me/R/square/report?ticket=${ticket}`,
+                '招待': `https://line.me/ti/g2/${ticket}`,
+                '参加': `https://line.me/R/square/join?ticket=${ticket}`
+            };
+            let html = '';
+            for (let [key, link] of Object.entries(types)) {
+                html += `<p>${key}: <a href="${link}" target="_blank">${link}</a> <button onclick="copyToClipboard('${link}')">コピー</button></p>`;
+            }
+            document.getElementById("link-results").innerHTML = html;
+        }
+        
+        function generateShareLink() {
+            const text = encodeURIComponent(document.getElementById("share-text").value);
+            const link = `https://line.me/R/share?text=${text}`;
+            document.getElementById("share-result").innerHTML = `<a href="${link}" target="_blank">${link}</a> <button onclick="copyToClipboard('${link}')">コピー</button>`;
+        }
+        
+        function analyzeUnicode() {
+            const input = document.getElementById("unicode-input").value;
+            let resultHTML = '';
+            for (let char of input) {
+                resultHTML += `<p>${char}: U+${char.codePointAt(0).toString(16).toUpperCase()} <button onclick="copyToClipboard('U+${char.codePointAt(0).toString(16).toUpperCase()}')">コピー</button></p>`;
+            }
+            document.getElementById("unicode-results").innerHTML = resultHTML;
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => alert("コピーしました"));
+        }
+    </script>
 </body>
 </html>
