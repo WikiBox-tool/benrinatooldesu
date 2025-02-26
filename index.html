@@ -64,7 +64,8 @@
             };
             let html = '';
             for (let [key, link] of Object.entries(types)) {
-                html += `<p>${key}: <button class='btn' onclick="redirectTo('${link}')">生成URL</button></p>`;
+                html += `<p>${key}: <button class='btn' onclick="redirectTo('${link}')">生成URL</button> 
+                        <button class='btn' onclick="copyToClipboard('${link}')">コピー</button></p>`;
             }
             document.getElementById("link-results").innerHTML = html;
         }
@@ -72,14 +73,17 @@
         function generateShareLink() {
             const text = encodeURIComponent(document.getElementById("share-text").value);
             const link = `https://line.me/R/share?text=${text}`;
-            document.getElementById("share-result").innerHTML = `<button class='btn' onclick="redirectTo('${link}')">生成URL</button>`;
+            document.getElementById("share-result").innerHTML = `
+                <button class='btn' onclick="redirectTo('${link}')">生成URL</button> 
+                <button class='btn' onclick="copyToClipboard('${link}')">コピー</button>`;
         }
         
         function analyzeUnicode() {
             const input = document.getElementById("unicode-input").value;
             let resultHTML = '';
             for (let char of input) {
-                resultHTML += `<p>${char}: U+${char.codePointAt(0).toString(16).toUpperCase()} <button class='btn' onclick="copyToClipboard('U+${char.codePointAt(0).toString(16).toUpperCase()}')">コピー</button></p>`;
+                resultHTML += `<p>${char}: U+${char.codePointAt(0).toString(16).toUpperCase()} 
+                               <button class='btn' onclick="copyToClipboard('U+${char.codePointAt(0).toString(16).toUpperCase()}')">コピー</button></p>`;
             }
             document.getElementById("unicode-results").innerHTML = resultHTML;
         }
@@ -94,3 +98,4 @@
     </script>
 </body>
 </html>
+
