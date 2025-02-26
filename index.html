@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LINE便利(なはず)ツール❕</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #fff; color: #000; text-align: center; }
-        .btn { margin: 5px; padding: 10px 20px; border: 1px solid #000; background: #fff; cursor: pointer; }
+        body { font-family: Arial, sans-serif; background: #000; color: #fff; text-align: center; }
+        .btn { margin: 5px; padding: 10px 20px; border: 1px solid #fff; background: #000; color: #fff; cursor: pointer; }
         .hidden { display: none; }
     </style>
 </head>
@@ -64,7 +64,7 @@
             };
             let html = '';
             for (let [key, link] of Object.entries(types)) {
-                html += `<p>${key}: <a href="${link}" target="_blank">${link}</a> <button onclick="copyToClipboard('${link}')">コピー</button></p>`;
+                html += `<p>${key}: <button class='btn' onclick="redirectTo('${link}')">生成URL</button></p>`;
             }
             document.getElementById("link-results").innerHTML = html;
         }
@@ -72,20 +72,24 @@
         function generateShareLink() {
             const text = encodeURIComponent(document.getElementById("share-text").value);
             const link = `https://line.me/R/share?text=${text}`;
-            document.getElementById("share-result").innerHTML = `<a href="${link}" target="_blank">${link}</a> <button onclick="copyToClipboard('${link}')">コピー</button>`;
+            document.getElementById("share-result").innerHTML = `<button class='btn' onclick="redirectTo('${link}')">生成URL</button>`;
         }
         
         function analyzeUnicode() {
             const input = document.getElementById("unicode-input").value;
             let resultHTML = '';
             for (let char of input) {
-                resultHTML += `<p>${char}: U+${char.codePointAt(0).toString(16).toUpperCase()} <button onclick="copyToClipboard('U+${char.codePointAt(0).toString(16).toUpperCase()}')">コピー</button></p>`;
+                resultHTML += `<p>${char}: U+${char.codePointAt(0).toString(16).toUpperCase()} <button class='btn' onclick="copyToClipboard('U+${char.codePointAt(0).toString(16).toUpperCase()}')">コピー</button></p>`;
             }
             document.getElementById("unicode-results").innerHTML = resultHTML;
         }
         
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => alert("コピーしました"));
+        }
+        
+        function redirectTo(url) {
+            window.location.href = url;
         }
     </script>
 </body>
